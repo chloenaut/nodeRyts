@@ -1,0 +1,25 @@
+{
+  "name": "blessedtest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pkg": ""
+  },
+  "pkg": {
+    "scripts": "build/*.js",
+    "targets": [
+      "node4-win-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "g": "^2.0.1",
+    "nexe": "^4.0.0-beta.18",
+    "pkg": "^4.5.1"
+  }
+}
