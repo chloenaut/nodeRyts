@@ -3,9 +3,18 @@ const { spawn } = require("child_process");
 const execFile = require("child_process").execFile;
 const fs = require("fs");
 const path = require("path");
+const request = require("request");
 
-const rytsPath = ".\\ryts";
-const mpvPath = ".\\mpv\\mpv"
+var rytsPath;
+var mpvPath;
+if(process.platform === "win32") {
+    rytsPath = ".\\ryts";
+    mpvPath = ".\\mpv\\mpv";
+} else {
+    rytsPath = "./ryts";
+    mpvPath = "mpv";
+}
+
 const videoQuality = 720;
 
 var screen = blessed.screen({
@@ -31,22 +40,22 @@ var mainMenu = blessed.list({
     top: 2,
     left: 'center',
     width: '15%',
-    height: 'shrink',
+    height: '50%',
     tags: true,
     keys:true,
     align: "center",
     style: {
-        fg: '#004D0D',
+        fg: 'green',
         bg: 'black',
         border: {
             fg: '#f0f0f0'
         },
         selected:{
             fg:'black',
-            bg:'#004D0D'
+            bg:'green'
         }
     },
-    items: ['search']
+    items: ['search', 'test image']
 });
 
 var searchList = blessed.list({
@@ -62,14 +71,14 @@ var searchList = blessed.list({
         type: 'line'
     },
     style: {
-        fg: '#004D0D',
+        fg: 'green',
         bg: 'black',
         border: {
             fg: '#f0f0f0'
         },
         selected:{
             fg:'black',
-            bg:'#004D0D'
+            bg:'green'
         }
     },
     items: []
@@ -113,14 +122,14 @@ var searchOpts = blessed.list({
         type: 'line'
     },
     style: {
-        fg: '#004D0D',
+        fg: 'green',
         bg: 'black',
         border: {
             fg: '#f0f0f0'
         },
         selected:{
             fg:'black',
-            bg:'#004D0D'
+            bg:'green'
         }
     },
     items: ["general", "video", "channel", "playlist"]
@@ -137,7 +146,7 @@ var errorMsg = blessed.message({
         type:'line'
     },
     style: {
-        fg:'#004D0D',
+        fg:'green',
         bg: 'black'
     }
 });
@@ -151,10 +160,20 @@ var loadingBox = blessed.loading({
     align:'center',
     top:0,
     style: {
-        fg:'#004D0D',
+        fg:'green',
         bg: 'black'
     }
-})
+});
+
+var imageBox = blessed.image({
+    parent: screen,
+    hidden: true,
+    left: 'center',
+    top: 'center',
+    file: "http://i.ytimg.com/vi/Wk9TFXDjKtc/hqdefault.jpg",
+    height:"100%",
+    width:"70%"
+});
 
 let searchResult = [];
 mainMenu.on('select',async (item,index)=>{
@@ -169,6 +188,10 @@ mainMenu.on('select',async (item,index)=>{
             break;
         case 'play by id':
             playById();
+            break;
+        case 'test image':
+            imageBox.show();
+            screen.render();
             break;
     }
 
